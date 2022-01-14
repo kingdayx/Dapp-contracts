@@ -6,12 +6,18 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 // ZLTToken with Governance.
-contract ZLTToken is ERC20('Zero Loss', 'ZLT'), Ownable {
+contract ZLTToken is ERC20, Ownable {
     using SafeMath for uint256;
     /// @notice Creates `_amount` token to `_to`. Must only be called by the owner (MasterChef).
     function mint(address _to, uint256 _amount) public onlyOwner {
         _mint(_to, _amount);
         _moveDelegates(address(0), _delegates[_to], _amount);
+    }
+    
+        constructor() ERC20("Zero Loss", "ZLT") {
+        uint256 initialSupply = 533,000,000;
+        require(initialSupply > 0, "INITIAL_SUPPLY has to be greater than 0");
+        _mint(msg.sender, initialSupply);
     }
 
     // Copied and modified from YAM code:
